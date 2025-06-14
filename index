@@ -25,7 +25,8 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            clip-path: polygon(50% 50%, 100% 0, 100% 100%); /* Adjusted clip-path */
+            /* This clip-path creates a large triangular wedge for each segment */
+            clip-path: polygon(50% 50%, 100% 0, 100% 100%);
             transform-origin: 50% 50%;
             opacity: 0.8;
         }
@@ -53,7 +54,7 @@
         }
         .wheel-pointer {
             position: absolute;
-            top: -20px;
+            top: -20px; /* Positions the pointer above the wheel */
             left: 50%;
             transform: translateX(-50%);
             width: 0;
@@ -65,9 +66,7 @@
         }
 
         /* Wheel animation */
-        .spinning {
-            transition: transform 3s ease-out; /* Smooth deceleration */
-        }
+        /* Note: The 'spinning' class from previous version is replaced by direct style manipulation for more precise control */
 
         /* Poker Card Decoration */
         .poker-card {
@@ -91,6 +90,7 @@
         .poker-card.red { color: #EF4444; }
         .poker-card.black { color: #1F2937; } /* Tailwind gray-800 */
 
+        /* Positioning for decorative cards */
         .poker-card:nth-child(1) { top: -20px; left: -30px; --rotation: -10deg; }
         .poker-card:nth-child(2) { bottom: -20px; right: -30px; --rotation: 15deg; }
         .poker-card:nth-child(3) { top: 40px; left: -80px; --rotation: -20deg; }
@@ -279,50 +279,37 @@
             const colors = ['red', 'green', 'blue', 'yellow'];
             const winningColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // Simulate wheel spin animation
-            const spins = 5; // Number of full spins
-            const anglePerColor = 360 / colors.length; // 90 degrees for 4 colors
-            let targetRotation = 0;
+            // --- Corrected Wheel Spin Animation Logic ---
+            // The pointer is fixed at the top (visually 270 degrees on a standard unit circle, where 0 is right, 90 is down, 180 is left, 270 is up).
+            // The segments are positioned: Red (0deg), Green (90deg), Blue (180deg), Yellow (270deg).
+            // We want the winning segment to rotate to align with the pointer (270deg position).
+
+            let angleToAlign = 0; // This is the additional clockwise rotation needed for the winning segment to reach the top.
 
             switch (winningColor) {
-                case 'red': targetRotation = 0; break;
-                case 'green': targetRotation = 270; break; // To align pointer with segment
-                case 'blue': targetRotation = 180; break;
-                case 'yellow': targetRotation = 90; break; // To align pointer with segment
+                case 'red':    angleToAlign = 270; break; // Red starts at 0deg, needs to rotate 270deg clockwise to reach 270deg (top)
+                case 'green':  angleToAlign = 180; break; // Green starts at 90deg, needs to rotate 180deg clockwise to reach 270deg (top)
+                case 'blue':   angleToAlign = 90; break;  // Blue starts at 180deg, needs to rotate 90deg clockwise to reach 270deg (top)
+                case 'yellow': angleToAlign = 0; break;   // Yellow starts at 270deg, already at the top, needs 0deg additional rotation
             }
 
-            // Calculate final rotation to land precisely on the winning color's segment
-            // We need to adjust targetRotation based on the visual layout of segments.
-            // My CSS puts Red at 0, Green at 90, Blue at 180, Yellow at 270.
-            // The pointer is at the top (0 degrees relative to wheel).
-            // So if red wins, it should stop with red at the top.
-            // If green wins, green (which starts at 90deg) should rotate to 0deg (or 360).
-            // If blue wins, blue (180deg) should rotate to 0deg.
-            // If yellow wins, yellow (270deg) should rotate to 0deg.
+            const spins = 5; // Number of full spins to make the animation engaging
+            const totalRotation = (spins * 360) + angleToAlign; // Total clockwise rotation for the wheel
 
-            let finalRotation = (spins * 360); // Start with full spins
-            if (winningColor === 'red') {
-                 finalRotation += 0; // Red is already at 0
-            } else if (winningColor === 'green') {
-                 finalRotation += 270; // Rotate green (at 90) counter-clockwise to 0. (360 - 90 = 270)
-            } else if (winningColor === 'blue') {
-                 finalRotation += 180; // Rotate blue (at 180) counter-clockwise to 0. (360 - 180 = 180)
-            } else if (winningColor === 'yellow') {
-                 finalRotation += 90; // Rotate yellow (at 270) counter-clockwise to 0. (360 - 270 = 90)
-            }
-
-
-            casinoWheel.style.transition = 'transform 3s ease-out';
-            casinoWheel.style.transform = `rotate(${finalRotation}deg)`;
+            casinoWheel.style.transition = 'transform 3s ease-out'; // Apply smooth transition
+            casinoWheel.style.transform = `rotate(${totalRotation}deg)`; // Apply the calculated rotation
 
             // After animation completes
             setTimeout(() => {
                 isSpinning = false;
                 updateUI(); // Re-enable spin button
 
+                // Update the last winning color display
                 lastWinColorDisplay.textContent = winningColor.charAt(0).toUpperCase() + winningColor.slice(1);
-                lastWinColorDisplay.style.color = `var(--tw-color-${winningColor}-400)`; // Tailwind color variable
+                // Dynamically set text color based on winning color (using Tailwind's color variables)
+                lastWinColorDisplay.style.color = `var(--tw-color-${winningColor}-400)`;
 
+                // Determine win/loss and update balance
                 if (selectedColor === winningColor) {
                     balance += betAmount * 2;
                     resultMessageDisplay.textContent = `🎉 You won! You doubled your bet! (+${betAmount})`;
@@ -331,14 +318,15 @@
                     resultMessageDisplay.textContent = `😔 You lost! The color was ${winningColor.toUpperCase()}.`;
                     resultMessageDisplay.classList.add('text-red-400', 'fade-in-out');
                 }
-                updateUI();
+                updateUI(); // Update balance display after win/loss
 
                 // Reset wheel position for next spin, without animation
+                // This prevents the wheel from 'snapping' back to 0 immediately after the animated spin.
                 setTimeout(() => {
-                    casinoWheel.style.transition = 'none';
-                    casinoWheel.style.transform = 'rotate(0deg)'; // Reset for next spin
-                }, 3100); // Slightly after the animation ends
-            }, 3000); // Match animation duration
+                    casinoWheel.style.transition = 'none'; // Remove transition for instant reset
+                    casinoWheel.style.transform = 'rotate(0deg)'; // Reset to initial state
+                }, 3100); // Slightly after the main animation ends (3000ms + buffer)
+            }, 3000); // Match main animation duration
         }
     </script>
 </body>
