@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Trader: Predict & Win!</title>
-    <!-- Tailwind CSS CDN - Provides utility-first CSS classes for styling -->
+    <title>ColorX Trading: Predict & Win!</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts - Inter for a clean, modern look -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* Base styles for the body, using Inter font and preventing horizontal scrolling */
         body {
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            /* Deep, rich background with a subtle radial gradient */
+            background: radial-gradient(circle at 50% 50%, #2a0a2a 0%, #1a0a1a 70%, #0d0d0d 100%);
+            color: #E0E0E0; /* Lighter text color for contrast */
         }
 
         /* Styling for the decorative casino wheel */
@@ -22,8 +25,12 @@
             height: 300px;
             border-radius: 50%;
             overflow: hidden;
-            border: 8px solid #FFD700; /* Gold border */
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); /* Gold glow effect */
+            /* Enhanced gold border with a metallic look */
+            border: 10px solid #FFD700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.9), /* Stronger gold glow */
+                        0 0 60px rgba(255, 165, 0, 0.5),
+                        inset 0 0 15px rgba(255, 255, 255, 0.5); /* Inner highlight */
+            transition: transform 0.1s ease-out; /* Smooth reset transition */
         }
 
         /* Styles for each segment of the wheel */
@@ -31,17 +38,16 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            /* clip-path creates a triangular segment starting from the center */
             clip-path: polygon(50% 50%, 100% 0, 100% 100%);
-            transform-origin: 50% 50%; /* Ensures rotation is around the center */
-            opacity: 0.8; /* Slight transparency for visual layering */
+            transform-origin: 50% 50%;
+            opacity: 0.9; /* Slightly less opaque for vibrancy */
         }
 
-        /* Specific background colors for each segment */
-        .segment-red { background-color: #EF4444; } /* Tailwind red-500 */
-        .segment-green { background-color: #22C55E; } /* Tailwind green-500 */
-        .segment-blue { background-color: #3B82F6; } /* Tailwind blue-500 */
-        .segment-yellow { background-color: #EAB308; } /* Tailwind yellow-500 */
+        /* Specific background colors for each segment - slightly adjusted for richer tones */
+        .segment-red { background-color: #C0392B; } /* Deeper Red */
+        .segment-green { background-color: #27AE60; } /* Emerald Green */
+        .segment-blue { background-color: #2980B9; } /* Royal Blue */
+        .segment-yellow { background-color: #F1C40F; } /* Vibrant Yellow */
 
         /* Styling for the inner circle of the wheel */
         .wheel-inner-circle {
@@ -50,60 +56,61 @@
             left: 50%;
             width: 80px;
             height: 80px;
-            background-color: #333; /* Dark background */
+            background: linear-gradient(to bottom right, #333, #111); /* Subtle dark gradient */
             border-radius: 50%;
-            transform: translate(-50%, -50%); /* Center the circle precisely */
+            transform: translate(-50%, -50%);
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            border: 4px solid #FFD700; /* Gold border */
+            font-weight: 800; /* Bolder text */
+            font-size: 1.8rem; /* Slightly larger */
+            border: 6px solid #FFD700; /* Thicker gold border */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 20px rgba(255, 215, 0, 0.5); /* Inner and outer glow */
         }
 
         /* Styling for the pointer that indicates the winning color */
         .wheel-pointer {
             position: absolute;
-            top: -20px; /* Positions the pointer above the wheel */
+            top: -25px; /* Moved slightly higher */
             left: 50%;
-            transform: translateX(-50%); /* Centers the pointer horizontally */
+            transform: translateX(-50%);
             width: 0;
             height: 0;
-            /* Creates a triangular shape using borders */
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 30px solid #FFD700; /* Gold pointer color */
-            z-index: 10; /* Ensures the pointer is above the wheel */
+            border-left: 25px solid transparent; /* Larger pointer */
+            border-right: 25px solid transparent;
+            border-bottom: 40px solid #FFD700; /* Gold pointer color */
+            z-index: 10;
+            filter: drop-shadow(0 5px 10px rgba(255, 215, 0, 0.7)); /* Glow behind pointer */
         }
 
         /* Poker Card Decoration - for visual casino theme */
         .poker-card {
-            width: 100px;
-            height: 140px;
-            background-color: #fff;
-            border-radius: 10px;
-            border: 1px solid #ddd;
+            width: 110px; /* Slightly larger cards */
+            height: 155px;
+            background: linear-gradient(135deg, #f0f0f0, #ffffff, #e0e0e0); /* Subtle gradient for card surface */
+            border-radius: 12px; /* More rounded corners */
+            border: 2px solid #b0b0b0; /* Softer border */
             position: absolute;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Soft shadow */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.5), inset 0 0 8px rgba(255,255,255,0.4); /* Stronger shadow with inner highlight */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 5px;
-            font-weight: bold;
-            font-size: 1.5rem;
-            transform: rotateZ(var(--rotation, 0deg)); /* Dynamic rotation via CSS variable */
-            transition: transform 0.5s ease; /* Smooth transition for rotation */
+            padding: 8px;
+            font-weight: 900; /* Very bold text */
+            font-size: 1.8rem; /* Larger font for card values */
+            transform: rotateZ(var(--rotation, 0deg));
+            transition: transform 0.5s ease;
         }
-        .poker-card.red { color: #EF4444; } /* Red suit color */
-        .poker-card.black { color: #1F2937; } /* Black suit color */
+        .poker-card.red { color: #D32F2F; } /* Deeper red for card suits */
+        .poker-card.black { color: #212121; } /* Richer black for card suits */
 
         /* Positioning and initial rotation for each decorative card */
-        .poker-card:nth-child(1) { top: -20px; left: -30px; --rotation: -10deg; }
-        .poker-card:nth-child(2) { bottom: -20px; right: -30px; --rotation: 15deg; }
-        .poker-card:nth-child(3) { top: 40px; left: -80px; --rotation: -20deg; }
-        .poker-card:nth-child(4) { bottom: 30px; right: -80px; --rotation: 25deg; }
+        .poker-card:nth-child(1) { top: -30px; left: -40px; --rotation: -15deg; }
+        .poker-card:nth-child(2) { bottom: -30px; right: -40px; --rotation: 20deg; }
+        .poker-card:nth-child(3) { top: 50px; left: -120px; --rotation: -25deg; }
+        .poker-card:nth-child(4) { bottom: 40px; right: -120px; --rotation: 30deg; }
 
         /* Animation for the result message (fade in and out) */
         .fade-in-out {
@@ -111,10 +118,10 @@
         }
 
         @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-20px); } /* Starts invisible, slightly up */
-            10% { opacity: 1; transform: translateY(0); } /* Fades in and moves to original position */
-            90% { opacity: 1; transform: translateY(0); } /* Stays visible */
-            100% { opacity: 0; transform: translateY(-20px); } /* Fades out and moves up */
+            0% { opacity: 0; transform: translateY(-20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
         }
 
         /* Responsive adjustments for smaller screens (max-width: 640px) */
@@ -126,7 +133,7 @@
             .wheel-inner-circle {
                 width: 60px;
                 height: 60px;
-                font-size: 1rem;
+                font-size: 1.2rem;
             }
             .wheel-pointer {
                 top: -15px;
@@ -144,78 +151,391 @@
             .poker-card:nth-child(3) { top: 30px; left: -60px; }
             .poker-card:nth-child(4) { bottom: 20px; right: -60px; }
         }
+
+        /* Tab specific styles - to make them look like polished casino buttons/chips */
+        .tab-button {
+            flex: 1; /* flex-1 */
+            padding: 0.75rem 0.5rem; /* py-3 px-2 */
+            border-radius: 0.5rem; /* rounded-lg */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 600; /* font-semibold */
+            text-align: center; /* text-center */
+            transition-property: all; /* transition */
+            transition-duration: 200ms; /* duration-200 */
+
+            background: linear-gradient(to bottom, #4A0E4A, #320A32); /* Dark purple gradient */
+            color: #FFD700; /* Gold text */
+            border: 1px solid #7B247B; /* Matching border */
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), 0 5px 10px rgba(0,0,0,0.5); /* Glossy and shadow */
+            margin: 0 4px; /* Space between tabs */
+        }
+        .tab-button:hover {
+            background: linear-gradient(to bottom, #5F1B5F, #4A0E4A); /* Slightly lighter on hover */
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), 0 8px 15px rgba(0,0,0,0.7); /* More prominent shadow on hover */
+            transform: translateY(-2px); /* Slight lift */
+        }
+        .tab-button.active {
+            background: linear-gradient(to top, #7B247B, #9B309B); /* Inverted/pressed look */
+            color: #FFF; /* White text when active */
+            border-color: #FFD700; /* Gold border for active tab */
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.7), 0 2px 5px rgba(0,0,0,0.3); /* Inner glow for active tab */
+        }
+
+        /* Enhanced styling for general buttons (moved Tailwind classes directly to HTML where possible) */
+        /* This rule now only contains styles not directly on the HTML buttons or specific to this selector */
+        button {
+            border-radius: 9999px; /* rounded-full */
+            font-weight: 700; /* font-bold */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            transform: var(--tw-transform); /* transform, will be overridden by hover */
+            transition-property: all; /* transition */
+            transition-duration: 300ms; /* duration-300 */
+            outline: 2px solid transparent; /* focus:outline-none */
+            outline-offset: 2px;
+        }
+
+        /* Specific styling for color buttons */
+        .color-btn {
+            padding: 1rem; /* p-4 */
+            color: white; /* text-white */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+            transform: var(--tw-transform); /* transform, overridden by hover */
+            transition-property: all; /* transition */
+            transition-duration: 200ms; /* duration-200 */
+
+            border-radius: 12px; /* Slightly more rounded */
+            border: 2px solid transparent; /* Initial transparent border for active state */
+        }
+        /* Specific styling for color buttons - active/selected state */
+        .color-btn.active, .color-btn.ring-4 {
+            border-color: #FFD700; /* Gold border when selected */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7), inset 0 0 5px rgba(255,255,255,0.3);
+        }
+
+        /* General input field styling */
+        input[type="number"], input[type="text"], input[type="email"] {
+            padding: 0.75rem; /* p-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            border-width: 1px; /* border */
+            color: white; /* text-white */
+            outline: 2px solid transparent; /* focus:outline-none */
+            outline-offset: 2px;
+            /* focus:ring-2 - this requires actual Tailwind config for `--tw-ring-color`
+               For direct CDN usage, we'll simulate it with a standard box-shadow on focus. */
+            transition-property: all; /* transition */
+            transition-duration: 200ms; /* duration-200 */
+
+            background-color: #2c2c2c; /* Darker input background */
+            border-color: #4a4a4a; /* Darker border */
+        }
+        input[type="number"]:focus, input[type="text"]:focus, input[type="email"]:focus {
+            border-color: #FFD700; /* Gold border on focus */
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); /* Gold glow on focus */
+        }
+
+
+        /* Scrollbar styling for chat and announcements */
+        #chat-messages, #announcements-list {
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #FFD700 #333; /* Thumb and Track */
+        }
+        /* Webkit browsers (Chrome, Safari) */
+        #chat-messages::-webkit-scrollbar, #announcements-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat-messages::-webkit-scrollbar-track, #announcements-list::-webkit-scrollbar-track {
+            background: #333; /* Scrollbar track background */
+            border-radius: 10px;
+        }
+        #chat-messages::-webkit-scrollbar-thumb, #announcements-list::-webkit-scrollbar-thumb {
+            background-color: #FFD700; /* Scrollbar thumb color (gold) */
+            border-radius: 10px;
+            border: 2px solid #333; /* Border around thumb */
+        }
+        #chat-messages::-webkit-scrollbar-thumb:hover, #announcements-list::-webkit-scrollbar-thumb:hover {
+            background-color: #ffe066; /* Lighter gold on hover */
+        }
+
     </style>
 </head>
-<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
+<body class="text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Main Game Container - Centralized and styled with Tailwind CSS -->
-    <div class="relative bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full md:max-w-xl lg:max-w-3xl flex flex-col items-center space-y-6 border border-gray-700">
-        <!-- Decorative Poker Cards - positioned absolutely around the main container -->
-        <div class="poker-card red" style="--rotation: -10deg;">A<br>♥</div>
-        <div class="poker-card black" style="--rotation: 15deg;">K<br>♠</div>
-        <div class="poker-card red" style="--rotation: -20deg; top: 40px; left: -100px;">Q<br>♦</div>
-        <div class="poker-card black" style="--rotation: 25deg; bottom: 30px; right: -100px;">J<br>♣</div>
+    <!-- Main Game Container -->
+    <div class="relative bg-gray-900 p-8 rounded-3xl shadow-2xl max-w-md w-full md:max-w-xl lg:max-w-3xl flex flex-col items-center space-y-6 border border-yellow-700" style="background: linear-gradient(145deg, #1f011f, #330333); box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,215,0,0.2);">
+        <!-- Decorative Poker Cards -->
+        <div class="poker-card red" style="--rotation: -15deg;">A<br>♥</div>
+        <div class="poker-card black" style="--rotation: 20deg;">K<br>♠</div>
+        <div class="poker-card red" style="--rotation: -25deg; top: 50px; left: -120px;">Q<br>♦</div>
+        <div class="poker-card black" style="--rotation: 30deg; bottom: 40px; right: -120px;">J<br>♣</div>
 
-        <!-- Game Title -->
-        <h1 class="text-4xl font-extrabold text-yellow-400 mb-6 text-center drop-shadow-lg">
-            Color Trader
+        <h1 class="text-5xl font-extrabold text-yellow-400 mb-6 text-center drop-shadow-lg" style="text-shadow: 0 0 15px #FFD700;">
+            ColorX Trading
         </h1>
 
-        <!-- Game Info - Balance and Last Win -->
-        <div class="flex justify-between items-center w-full text-lg font-semibold bg-gray-700 p-4 rounded-lg shadow-inner">
-            <span>Balance: <span id="balance" class="text-green-400">$1000</span></span>
-            <span>Last Win: <span id="last-win-color" class="font-normal">None</span></span>
+        <!-- Tab Navigation -->
+        <div class="w-full flex justify-center rounded-lg p-2 mb-6" style="background: linear-gradient(to right, #330333, #1f011f);">
+            <button class="tab-button active" data-tab="game">Game</button>
+            <button class="tab-button" data-tab="register">Register</button>
+            <button class="tab-button" data-tab="chat">Chat</button>
+            <button class="tab-button" data-tab="announcements">Announcements</button>
         </div>
 
-        <!-- Bet Input Section -->
-        <div class="w-full flex flex-col items-center space-y-4">
-            <label for="bet-amount" class="text-lg text-gray-300">Enter your bet:</label>
-            <input type="number" id="bet-amount" value="10" min="1" class="w-32 p-3 rounded-lg bg-gray-700 border border-gray-600 text-center text-xl font-bold text-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200" />
-            <p id="bet-error" class="text-red-400 text-sm h-5"></p>
-        </div>
-
-        <!-- Color Selection Section -->
-        <div class="w-full">
-            <p class="text-center text-lg text-gray-300 mb-3">Choose your color:</p>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-                <!-- Color selection buttons with Tailwind styling and custom focus/ring -->
-                <button class="color-btn bg-red-600 hover:bg-red-700 focus:ring-red-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="red">Red</button>
-                <button class="color-btn bg-green-600 hover:bg-green-700 focus:ring-green-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="green">Green</button>
-                <button class="color-btn bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="blue">Blue</button>
-                <button class="color-btn bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="yellow">Yellow</button>
+        <!-- Tab Content Containers -->
+        <div id="game-tab" class="tab-content w-full flex flex-col items-center space-y-6">
+            <!-- Game Info -->
+            <div class="flex justify-between items-center w-full text-lg font-semibold p-4 rounded-lg shadow-inner" style="background: #2a2a2a; border: 1px solid #4a4a4a; box-shadow: inset 0 0 8px rgba(0,0,0,0.5);">
+                <span>Balance: <span id="balance" class="text-green-400">$1000</span></span>
+                <span>Last Win: <span id="last-win-color" class="font-normal text-yellow-300">None</span></span>
             </div>
-            <p id="color-error" class="text-red-400 text-sm h-5 text-center mt-2"></p>
-        </div>
 
-        <!-- Casino Wheel - Decorative element with animation controlled by JS -->
-        <div class="relative mt-8 mb-6 flex justify-center items-center">
-            <div class="casino-wheel">
-                <!-- Segments are rotated to form a full circle -->
-                <div class="wheel-segment segment-red" style="transform: rotate(0deg);"></div>
-                <div class="wheel-segment segment-green" style="transform: rotate(90deg);"></div>
-                <div class="wheel-segment segment-blue" style="transform: rotate(180deg);"></div>
-                <div class="wheel-segment segment-yellow" style="transform: rotate(270deg);"></div>
-                <div class="wheel-inner-circle"></div>
+            <!-- Bet Input -->
+            <div class="w-full flex flex-col items-center space-y-4">
+                <label for="bet-amount" class="text-lg text-gray-300">Place Your Bet:</label>
+                <input type="number" id="bet-amount" value="10" min="1" class="w-32 text-center text-xl font-bold text-yellow-300" />
+                <p id="bet-error" class="text-red-400 text-sm h-5"></p>
             </div>
-            <div class="wheel-pointer"></div>
+
+            <!-- Color Selection -->
+            <div class="w-full">
+                <p class="text-center text-lg text-gray-300 mb-3">Choose Your Lucky Color:</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                    <button class="color-btn" data-color="red" style="background: linear-gradient(to right, #B00020, #E00020);">Red</button>
+                    <button class="color-btn" data-color="green" style="background: linear-gradient(to right, #00897B, #00BFA5);">Green</button>
+                    <button class="color-btn" data-color="blue" style="background: linear-gradient(to right, #1976D2, #2196F3);">Blue</button>
+                    <button class="color-btn" data-color="yellow" style="background: linear-gradient(to right, #FFD600, #FFEA00);">Yellow</button>
+                </div>
+                <p id="color-error" class="text-red-400 text-sm h-5 text-center mt-2"></p>
+            </div>
+
+            <!-- Casino Wheel (Decorative & Animated) -->
+            <div class="relative mt-8 mb-6 flex justify-center items-center">
+                <div class="casino-wheel">
+                    <div class="wheel-segment segment-red" style="transform: rotate(0deg);"></div>
+                    <div class="wheel-segment segment-green" style="transform: rotate(90deg);"></div>
+                    <div class="wheel-segment segment-blue" style="transform: rotate(180deg);"></div>
+                    <div class="wheel-segment segment-yellow" style="transform: rotate(270deg);"></div>
+                    <div class="wheel-inner-circle"></div>
+                </div>
+                <div class="wheel-pointer"></div>
+            </div>
+
+            <!-- Spin Button -->
+            <button id="spin-btn" class="bg-gradient-to-r from-purple-800 to-indigo-800 hover:from-purple-900 hover:to-indigo-900 text-white py-4 px-8 rounded-full text-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 focus:ring-4 focus:ring-purple-700" style="text-shadow: 0 0 10px rgba(255,255,255,0.7);">
+                SPIN THE WHEEL!
+            </button>
+
+            <!-- Result Message -->
+            <p id="result-message" class="text-xl font-bold text-center mt-4 h-8"></p>
         </div>
 
-        <!-- Spin Button - Main interaction point -->
-        <button id="spin-btn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-75">
-            SPIN THE WHEEL!
-        </button>
+        <!-- Register Tab Content -->
+        <div id="register-tab" class="tab-content w-full hidden">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center" style="text-shadow: 0 0 10px #FFD700;">Register Account</h2>
+            <form id="registration-form" action="https://formspree.io/f/YOUR_FORMSPREE_ENDPOINT" method="POST" class="w-full space-y-4">
+                <div>
+                    <label for="reg-name" class="block text-lg font-semibold text-gray-300 mb-1">Name:</label>
+                    <input type="text" id="reg-name" name="name" required placeholder="Your Name">
+                </div>
+                <div>
+                    <label for="reg-email" class="block text-lg font-semibold text-gray-300 mb-1">Email:</label>
+                    <input type="email" id="reg-email" name="email" required placeholder="your.email@example.com">
+                </div>
+                <button type="submit" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg text-xl shadow-lg hover:shadow-xl transform hover:scale-105 focus:ring-4 focus:ring-green-600" style="text-shadow: 0 0 8px rgba(0,0,0,0.5);">
+                    Register Now
+                </button>
+                <p id="register-message" class="text-center text-sm mt-3 h-5"></p>
+            </form>
+        </div>
 
-        <!-- Result Message Display -->
-        <p id="result-message" class="text-xl font-bold text-center mt-4 h-8"></p>
+        <!-- Chat Tab Content -->
+        <div id="chat-tab" class="tab-content w-full hidden">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center" style="text-shadow: 0 0 10px #FFD700;">Global Chat</h2>
+            <p id="chat-user-id" class="text-gray-400 text-sm text-center mb-4">Your User ID: Loading...</p>
+            <div id="chat-messages" class="w-full h-80 rounded-lg p-4 mb-4 flex flex-col space-y-2" style="background: #2a2a2a; border: 1px solid #4a4a4a; box-shadow: inset 0 0 8px rgba(0,0,0,0.5);">
+                <!-- Chat messages will be loaded here -->
+                <div class="text-center text-gray-500">Loading messages...</div>
+            </div>
+            <div class="flex w-full space-x-2">
+                <input type="text" id="chat-input" class="flex-grow" placeholder="Type your message...">
+                <button id="send-chat-btn" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-200 focus:ring-4 focus:ring-purple-600">
+                    Send
+                </button>
+            </div>
+             <p id="chat-error-message" class="text-red-400 text-sm h-5 text-center mt-2"></p>
+        </div>
+
+        <!-- Announcements Tab Content -->
+        <div id="announcements-tab" class="tab-content w-full hidden">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center" style="text-shadow: 0 0 10px #FFD700;">Announcements</h2>
+            <div id="announcements-list" class="w-full rounded-lg p-4 overflow-y-auto h-auto min-h-[100px] max-h-80" style="background: #2a2a2a; border: 1px solid #4a4a4a; box-shadow: inset 0 0 8px rgba(0,0,0,0.5);">
+                <!-- Announcements will be loaded here -->
+                <p class="text-center text-gray-500">No announcements yet.</p>
+            </div>
+             <p id="announcements-error-message" class="text-red-400 text-sm h-5 text-center mt-2"></p>
+        </div>
+
     </div>
 
-    <script>
-        // Game State Variables - Declared globally for easy access
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase instances and user ID
+        let app;
+        let db;
+        let auth;
+        let userId = null;
+        let isAuthReady = false;
+
+        // --- Firebase Initialization and Authentication ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // Initialize Firebase app if config is available
+        if (Object.keys(firebaseConfig).length > 0) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+
+            // Listen for authentication state changes
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    document.getElementById('chat-user-id').textContent = `Your User ID: ${userId}`;
+                    isAuthReady = true;
+                    // Start listening to chat and announcements once authenticated
+                    setupChatListener();
+                    setupAnnouncementsListener();
+                } else {
+                    // Sign in anonymously if no user is authenticated
+                    try {
+                        if (initialAuthToken) {
+                            await signInWithCustomToken(auth, initialAuthToken);
+                        } else {
+                            await signInAnonymously(auth);
+                        }
+                    } catch (error) {
+                        console.error("Firebase Auth Error:", error);
+                        document.getElementById('chat-error-message').textContent = `Auth error: ${error.message}`;
+                        document.getElementById('announcements-error-message').textContent = `Auth error: ${error.message}`;
+                    }
+                }
+            });
+        } else {
+            console.warn("Firebase configuration not found. Chat and Announcements will not function.");
+            document.getElementById('chat-user-id').textContent = 'Your User ID: Not connected (Firebase config missing)';
+            document.getElementById('chat-messages').innerHTML = '<div class="text-center text-red-400">Firebase not configured. Chat disabled.</div>';
+            document.getElementById('announcements-list').innerHTML = '<p class="text-center text-red-400">Firebase not configured. Announcements disabled.</p>';
+        }
+
+        // --- Chat Functionality ---
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        const chatMessagesDisplay = document.getElementById('chat-messages');
+
+        sendChatBtn.addEventListener('click', async () => {
+            if (!isAuthReady || !userId) {
+                document.getElementById('chat-error-message').textContent = 'Not connected to chat. Please wait for authentication.';
+                return;
+            }
+            const messageText = chatInput.value.trim();
+            if (messageText === '') {
+                document.getElementById('chat-error-message').textContent = 'Message cannot be empty.';
+                return;
+            }
+
+            try {
+                // Add message to Firestore
+                await addDoc(collection(db, `artifacts/${appId}/public/data/chat_messages`), {
+                    userId: userId,
+                    message: messageText,
+                    timestamp: serverTimestamp() // Use server timestamp for consistent ordering
+                });
+                chatInput.value = ''; // Clear input
+                document.getElementById('chat-error-message').textContent = ''; // Clear error
+            } catch (error) {
+                console.error("Error sending message:", error);
+                document.getElementById('chat-error-message').textContent = `Error sending message: ${error.message}`;
+            }
+        });
+
+        // Set up real-time listener for chat messages
+        function setupChatListener() {
+            if (!db || !isAuthReady) return;
+
+            // Using onSnapshot to listen for real-time updates
+            // Note: Firebase `orderBy` functionality is restricted in this environment,
+            // so messages are displayed as they arrive, not strictly by timestamp.
+            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/chat_messages`)), (snapshot) => {
+                chatMessagesDisplay.innerHTML = ''; // Clear existing messages
+                if (snapshot.empty) {
+                    chatMessagesDisplay.innerHTML = '<div class="text-center text-gray-500">No messages yet. Start chatting!</div>';
+                    return;
+                }
+                // Sort messages by timestamp if present, otherwise rely on snapshot order
+                const messages = [];
+                snapshot.forEach(doc => {
+                    messages.push(doc.data());
+                });
+
+                messages.sort((a, b) => {
+                    if (a.timestamp && b.timestamp) {
+                        return a.timestamp.seconds - b.timestamp.seconds;
+                    }
+                    return 0; // Maintain original order if no timestamp
+                });
+
+                messages.forEach(data => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('p-2', 'rounded-lg', 'break-words');
+                    const senderId = data.userId === userId ? 'You' : data.userId.substring(0, 8) + '...'; // Shorten ID for display
+                    messageElement.innerHTML = `<span class="font-bold ${data.userId === userId ? 'text-blue-300' : 'text-yellow-300'}">${senderId}:</span> ${data.message}`;
+                    chatMessagesDisplay.appendChild(messageElement);
+                });
+                // Scroll to the bottom of the chat
+                chatMessagesDisplay.scrollTop = chatMessagesDisplay.scrollHeight;
+            }, (error) => {
+                console.error("Error getting chat messages:", error);
+                document.getElementById('chat-error-message').textContent = `Error loading chat: ${error.message}`;
+                chatMessagesDisplay.innerHTML = '<div class="text-center text-red-400">Error loading messages.</div>';
+            });
+        }
+
+
+        // --- Announcements Functionality ---
+        const announcementsList = document.getElementById('announcements-list');
+
+        function setupAnnouncementsListener() {
+            if (!db || !isAuthReady) return;
+
+            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/announcements`)), (snapshot) => {
+                announcementsList.innerHTML = ''; // Clear existing announcements
+                if (snapshot.empty) {
+                    announcementsList.innerHTML = '<p class="text-center text-gray-500">No announcements yet.</p>';
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const announcementElement = document.createElement('div');
+                    announcementElement.classList.add('bg-gray-800', 'p-3', 'rounded-lg', 'mb-2', 'border', 'border-gray-600', 'shadow-md');
+                    announcementElement.innerHTML = `<p class="font-bold text-lg text-yellow-200 mb-1">${data.title}</p><p class="text-gray-300 text-sm">${data.content}</p>`;
+                    announcementsList.appendChild(announcementElement);
+                });
+            }, (error) => {
+                console.error("Error getting announcements:", error);
+                document.getElementById('announcements-error-message').textContent = `Error loading announcements: ${error.message}`;
+                announcementsList.innerHTML = '<p class="text-center text-red-400">Error loading announcements.</p>';
+            });
+        }
+
+        // --- Game Logic ---
         let balance = 1000;
         let selectedColor = null;
-        let isSpinning = false; // Flag to prevent multiple concurrent spins
+        let isSpinning = false;
 
-        // DOM Element References - Caching elements for performance
         const balanceDisplay = document.getElementById('balance');
         const betAmountInput = document.getElementById('bet-amount');
         const betErrorDisplay = document.getElementById('bet-error');
@@ -226,27 +546,21 @@
         const lastWinColorDisplay = document.getElementById('last-win-color');
         const casinoWheel = document.querySelector('.casino-wheel');
 
-        // Initial UI Update call when the script loads
-        updateUI();
+        updateUI(); // Initial UI update for the game tab
 
-        // Event Listeners for color selection buttons
         colorButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // Remove the 'selected' visual indicator from all buttons
-                colorButtons.forEach(btn => btn.classList.remove('ring-4', 'ring-yellow-400', 'border-yellow-400'));
+                colorButtons.forEach(btn => btn.classList.remove('active')); // Use 'active' class for styling
                 // Add the 'selected' visual indicator to the clicked button
-                button.classList.add('ring-4', 'ring-yellow-400', 'border-yellow-400');
+                button.classList.add('active'); // Add 'active' class
                 selectedColor = button.dataset.color; // Store the chosen color
                 colorErrorDisplay.textContent = ''; // Clear any previous color selection error
             });
         });
 
-        // Event listener for the main spin button
         spinBtn.addEventListener('click', spinWheel);
 
-        /**
-         * Updates the UI elements such as balance display and spin button state.
-         */
         function updateUI() {
             balanceDisplay.textContent = `$${balance}`;
             // Disable spin button if wheel is spinning to prevent re-clicks
@@ -259,13 +573,9 @@
             }
         }
 
-        /**
-         * Handles the main game logic for spinning the wheel, determining win/loss, and updating the UI.
-         */
         function spinWheel() {
-            if (isSpinning) return; // Exit if a spin is already in progress
+            if (isSpinning) return;
 
-            // Input Validation: Check bet amount
             const betAmount = parseInt(betAmountInput.value);
             if (isNaN(betAmount) || betAmount <= 0) {
                 betErrorDisplay.textContent = 'Please enter a valid positive bet amount.';
@@ -275,89 +585,117 @@
                 betErrorDisplay.textContent = `You don't have enough balance! Max bet: $${balance}`;
                 return;
             }
-            // Input Validation: Check if a color is selected
             if (!selectedColor) {
                 colorErrorDisplay.textContent = 'Please select a color.';
                 return;
             }
 
-            // Clear previous error and result messages
             betErrorDisplay.textContent = '';
             resultMessageDisplay.textContent = '';
-            resultMessageDisplay.classList.remove('fade-in-out', 'text-green-400', 'text-red-400'); // Reset animation and color
+            resultMessageDisplay.classList.remove('fade-in-out', 'text-green-400', 'text-red-400');
 
-            isSpinning = true; // Set spinning flag
-            updateUI(); // Update UI to disable spin button
+            isSpinning = true;
+            updateUI();
 
-            // Deduct bet amount from balance immediately
             balance -= betAmount;
-            updateUI(); // Update balance display
+            updateUI();
 
-            // Determine the winning color randomly
             const colors = ['red', 'green', 'blue', 'yellow'];
             const winningColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // --- Wheel Spin Animation Logic ---
-            // The pointer is visually at the top (conceptually 270 degrees on a standard unit circle,
-            // where 0 is right, 90 is down, 180 is left, 270 is up).
-            // The wheel segments are arranged: Red (0deg), Green (90deg), Blue (180deg), Yellow (270deg).
-            // We need to calculate how much to rotate the wheel so the winning segment aligns with the pointer.
-
-            let angleToAlign = 0; // This will store the additional clockwise rotation needed.
-
+            let angleToAlign = 0;
             switch (winningColor) {
-                case 'red':
-                    angleToAlign = 270; // Red is at 0deg, needs to rotate 270deg clockwise to reach 270deg (top)
-                    break;
-                case 'green':
-                    angleToAlign = 180; // Green is at 90deg, needs to rotate 180deg clockwise to reach 270deg (top)
-                    break;
-                case 'blue':
-                    angleToAlign = 90; // Blue is at 180deg, needs to rotate 90deg clockwise to reach 270deg (top)
-                    break;
-                case 'yellow':
-                    angleToAlign = 0; // Yellow is at 270deg, already at the top, needs 0deg additional rotation
-                    break;
+                case 'red':    angleToAlign = 270; break;
+                case 'green':  angleToAlign = 180; break;
+                case 'blue':   angleToAlign = 90; break;
+                case 'yellow': angleToAlign = 0; break;
             }
 
-            const spins = 5; // Number of full 360-degree rotations for visual effect
-            // Total rotation combines full spins and the precise alignment angle
+            const spins = 5;
             const totalRotation = (spins * 360) + angleToAlign;
 
-            // Apply transition for smooth animation
             casinoWheel.style.transition = 'transform 3s ease-out';
-            // Apply the calculated rotation to the wheel
             casinoWheel.style.transform = `rotate(${totalRotation}deg)`;
 
-            // After the animation completes (3 seconds)
             setTimeout(() => {
-                isSpinning = false; // Reset spinning flag
-                updateUI(); // Re-enable spin button
+                isSpinning = false;
+                updateUI();
 
-                // Update the 'Last Win' display
                 lastWinColorDisplay.textContent = winningColor.charAt(0).toUpperCase() + winningColor.slice(1);
-                // Set the color of 'Last Win' text to match the winning color (using Tailwind's CSS variables)
                 lastWinColorDisplay.style.color = `var(--tw-color-${winningColor}-400)`;
 
-                // Determine if the player won or lost and update balance/message
                 if (selectedColor === winningColor) {
-                    balance += betAmount * 2; // Double the bet amount
+                    balance += betAmount * 2;
                     resultMessageDisplay.textContent = `🎉 You won! You doubled your bet! (+${betAmount})`;
-                    resultMessageDisplay.classList.add('text-green-400', 'fade-in-out'); // Display win message in green
+                    resultMessageDisplay.classList.add('text-green-400', 'fade-in-out');
                 } else {
                     resultMessageDisplay.textContent = `😔 You lost! The color was ${winningColor.toUpperCase()}.`;
-                    resultMessageDisplay.classList.add('text-red-400', 'fade-in-out'); // Display loss message in red
+                    resultMessageDisplay.classList.add('text-red-400', 'fade-in-out');
                 }
-                updateUI(); // Update the balance display after win/loss
+                updateUI();
 
-                // Reset wheel position for the *next* spin without animation
-                // This prevents the wheel from snapping back immediately after the animated spin ends.
                 setTimeout(() => {
-                    casinoWheel.style.transition = 'none'; // Temporarily remove transition
-                    casinoWheel.style.transform = 'rotate(0deg)'; // Reset to original position
-                }, 3100); // A small delay after the main animation finishes to ensure it's not visible
-            }, 3000); // This timeout matches the 'transform' transition duration
+                    casinoWheel.style.transition = 'none';
+                    casinoWheel.style.transform = 'rotate(0deg)';
+                }, 3100);
+            }, 3000);
         }
+
+        // --- Tab Switching Logic ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Deactivate all buttons and hide all contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.add('hidden'));
+
+                // Activate clicked button and show corresponding content
+                button.classList.add('active');
+                const targetTabId = button.dataset.tab + '-tab';
+                document.getElementById(targetTabId).classList.remove('hidden');
+            });
+        });
+
+        // --- Registration Form Submission ---
+        const registrationForm = document.getElementById('registration-form');
+        const registerMessage = document.getElementById('register-message');
+
+        registrationForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            registerMessage.textContent = 'Submitting...';
+            registerMessage.classList.remove('text-green-400', 'text-red-400');
+
+            try {
+                const formData = new FormData(registrationForm);
+                // IMPORTANT: Replace 'YOUR_FORMSPREE_ENDPOINT' with your actual Formspree form endpoint!
+                // Example: https://formspree.io/f/xyza123
+                const response = await fetch(registrationForm.action, {
+                    method: registrationForm.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json' // Important for Formspree to return JSON
+                    }
+                });
+
+                if (response.ok) {
+                    registerMessage.textContent = 'Registration successful! Thank you.';
+                    registerMessage.classList.add('text-green-400');
+                    registrationForm.reset(); // Clear form
+                } else {
+                    const errorData = await response.json();
+                    registerMessage.textContent = `Registration failed: ${errorData.errors ? errorData.errors.map(e => e.message).join(', ') : 'Unknown error'}`;
+                    registerMessage.classList.add('text-red-400');
+                }
+            } catch (error) {
+                console.error('Form submission error:', error);
+                registerMessage.textContent = 'An error occurred during submission. Please try again.';
+                registerMessage.classList.add('text-red-400');
+            }
+        });
+
     </script>
 </body>
 </html>
