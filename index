@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Color Trader: Predict & Win!</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN - Provides utility-first CSS classes for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter for a clean, modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Base styles for the body, using Inter font and preventing horizontal scrolling */
         body {
             font-family: 'Inter', sans-serif;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
+
+        /* Styling for the decorative casino wheel */
         .casino-wheel {
             position: relative;
             width: 300px;
@@ -19,56 +23,61 @@
             border-radius: 50%;
             overflow: hidden;
             border: 8px solid #FFD700; /* Gold border */
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); /* Gold glow */
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7); /* Gold glow effect */
         }
+
+        /* Styles for each segment of the wheel */
         .wheel-segment {
             position: absolute;
             width: 100%;
             height: 100%;
-            /* This clip-path creates a large triangular wedge for each segment */
+            /* clip-path creates a triangular segment starting from the center */
             clip-path: polygon(50% 50%, 100% 0, 100% 100%);
-            transform-origin: 50% 50%;
-            opacity: 0.8;
+            transform-origin: 50% 50%; /* Ensures rotation is around the center */
+            opacity: 0.8; /* Slight transparency for visual layering */
         }
+
+        /* Specific background colors for each segment */
         .segment-red { background-color: #EF4444; } /* Tailwind red-500 */
         .segment-green { background-color: #22C55E; } /* Tailwind green-500 */
         .segment-blue { background-color: #3B82F6; } /* Tailwind blue-500 */
         .segment-yellow { background-color: #EAB308; } /* Tailwind yellow-500 */
 
+        /* Styling for the inner circle of the wheel */
         .wheel-inner-circle {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 80px;
             height: 80px;
-            background-color: #333;
+            background-color: #333; /* Dark background */
             border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Center the circle precisely */
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             font-weight: bold;
             font-size: 1.5rem;
-            border: 4px solid #FFD700;
+            border: 4px solid #FFD700; /* Gold border */
         }
+
+        /* Styling for the pointer that indicates the winning color */
         .wheel-pointer {
             position: absolute;
             top: -20px; /* Positions the pointer above the wheel */
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%); /* Centers the pointer horizontally */
             width: 0;
             height: 0;
+            /* Creates a triangular shape using borders */
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-bottom: 30px solid #FFD700; /* Gold pointer */
-            z-index: 10;
+            border-bottom: 30px solid #FFD700; /* Gold pointer color */
+            z-index: 10; /* Ensures the pointer is above the wheel */
         }
 
-        /* Wheel animation */
-        /* Note: The 'spinning' class from previous version is replaced by direct style manipulation for more precise control */
-
-        /* Poker Card Decoration */
+        /* Poker Card Decoration - for visual casino theme */
         .poker-card {
             width: 100px;
             height: 140px;
@@ -76,7 +85,7 @@
             border-radius: 10px;
             border: 1px solid #ddd;
             position: absolute;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); /* Soft shadow */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -84,31 +93,31 @@
             padding: 5px;
             font-weight: bold;
             font-size: 1.5rem;
-            transform: rotateZ(var(--rotation, 0deg)); /* Dynamic rotation */
-            transition: transform 0.5s ease;
+            transform: rotateZ(var(--rotation, 0deg)); /* Dynamic rotation via CSS variable */
+            transition: transform 0.5s ease; /* Smooth transition for rotation */
         }
-        .poker-card.red { color: #EF4444; }
-        .poker-card.black { color: #1F2937; } /* Tailwind gray-800 */
+        .poker-card.red { color: #EF4444; } /* Red suit color */
+        .poker-card.black { color: #1F2937; } /* Black suit color */
 
-        /* Positioning for decorative cards */
+        /* Positioning and initial rotation for each decorative card */
         .poker-card:nth-child(1) { top: -20px; left: -30px; --rotation: -10deg; }
         .poker-card:nth-child(2) { bottom: -20px; right: -30px; --rotation: 15deg; }
         .poker-card:nth-child(3) { top: 40px; left: -80px; --rotation: -20deg; }
         .poker-card:nth-child(4) { bottom: 30px; right: -80px; --rotation: 25deg; }
 
-        /* Animation for result message */
+        /* Animation for the result message (fade in and out) */
         .fade-in-out {
             animation: fadeInOut 3s forwards;
         }
 
         @keyframes fadeInOut {
-            0% { opacity: 0; transform: translateY(-20px); }
-            10% { opacity: 1; transform: translateY(0); }
-            90% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-20px); }
+            0% { opacity: 0; transform: translateY(-20px); } /* Starts invisible, slightly up */
+            10% { opacity: 1; transform: translateY(0); } /* Fades in and moves to original position */
+            90% { opacity: 1; transform: translateY(0); } /* Stays visible */
+            100% { opacity: 0; transform: translateY(-20px); } /* Fades out and moves up */
         }
 
-        /* Responsive adjustments for wheel and cards */
+        /* Responsive adjustments for smaller screens (max-width: 640px) */
         @media (max-width: 640px) {
             .casino-wheel {
                 width: 200px;
@@ -139,46 +148,49 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Main Game Container -->
+    <!-- Main Game Container - Centralized and styled with Tailwind CSS -->
     <div class="relative bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-md w-full md:max-w-xl lg:max-w-3xl flex flex-col items-center space-y-6 border border-gray-700">
-        <!-- Decorative Poker Cards -->
+        <!-- Decorative Poker Cards - positioned absolutely around the main container -->
         <div class="poker-card red" style="--rotation: -10deg;">A<br>♥</div>
         <div class="poker-card black" style="--rotation: 15deg;">K<br>♠</div>
         <div class="poker-card red" style="--rotation: -20deg; top: 40px; left: -100px;">Q<br>♦</div>
         <div class="poker-card black" style="--rotation: 25deg; bottom: 30px; right: -100px;">J<br>♣</div>
 
+        <!-- Game Title -->
         <h1 class="text-4xl font-extrabold text-yellow-400 mb-6 text-center drop-shadow-lg">
             Color Trader
         </h1>
 
-        <!-- Game Info -->
+        <!-- Game Info - Balance and Last Win -->
         <div class="flex justify-between items-center w-full text-lg font-semibold bg-gray-700 p-4 rounded-lg shadow-inner">
             <span>Balance: <span id="balance" class="text-green-400">$1000</span></span>
             <span>Last Win: <span id="last-win-color" class="font-normal">None</span></span>
         </div>
 
-        <!-- Bet Input -->
+        <!-- Bet Input Section -->
         <div class="w-full flex flex-col items-center space-y-4">
             <label for="bet-amount" class="text-lg text-gray-300">Enter your bet:</label>
             <input type="number" id="bet-amount" value="10" min="1" class="w-32 p-3 rounded-lg bg-gray-700 border border-gray-600 text-center text-xl font-bold text-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 transition duration-200" />
             <p id="bet-error" class="text-red-400 text-sm h-5"></p>
         </div>
 
-        <!-- Color Selection -->
+        <!-- Color Selection Section -->
         <div class="w-full">
             <p class="text-center text-lg text-gray-300 mb-3">Choose your color:</p>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
-                <button class="color-btn bg-red-600 hover:bg-red-700 focus:ring-red-500" data-color="red">Red</button>
-                <button class="color-btn bg-green-600 hover:bg-green-700 focus:ring-green-500" data-color="green">Green</button>
-                <button class="color-btn bg-blue-600 hover:bg-blue-700 focus:ring-blue-500" data-color="blue">Blue</button>
-                <button class="color-btn bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500" data-color="yellow">Yellow</button>
+                <!-- Color selection buttons with Tailwind styling and custom focus/ring -->
+                <button class="color-btn bg-red-600 hover:bg-red-700 focus:ring-red-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="red">Red</button>
+                <button class="color-btn bg-green-600 hover:bg-green-700 focus:ring-green-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="green">Green</button>
+                <button class="color-btn bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="blue">Blue</button>
+                <button class="color-btn bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500 p-4 rounded-lg font-bold text-white shadow-md transition duration-200" data-color="yellow">Yellow</button>
             </div>
             <p id="color-error" class="text-red-400 text-sm h-5 text-center mt-2"></p>
         </div>
 
-        <!-- Casino Wheel (Decorative & Animated) -->
+        <!-- Casino Wheel - Decorative element with animation controlled by JS -->
         <div class="relative mt-8 mb-6 flex justify-center items-center">
             <div class="casino-wheel">
+                <!-- Segments are rotated to form a full circle -->
                 <div class="wheel-segment segment-red" style="transform: rotate(0deg);"></div>
                 <div class="wheel-segment segment-green" style="transform: rotate(90deg);"></div>
                 <div class="wheel-segment segment-blue" style="transform: rotate(180deg);"></div>
@@ -188,22 +200,22 @@
             <div class="wheel-pointer"></div>
         </div>
 
-        <!-- Spin Button -->
+        <!-- Spin Button - Main interaction point -->
         <button id="spin-btn" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-full text-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-75">
             SPIN THE WHEEL!
         </button>
 
-        <!-- Result Message -->
+        <!-- Result Message Display -->
         <p id="result-message" class="text-xl font-bold text-center mt-4 h-8"></p>
     </div>
 
     <script>
-        // Game State Variables
+        // Game State Variables - Declared globally for easy access
         let balance = 1000;
         let selectedColor = null;
-        let isSpinning = false; // To prevent multiple spins
+        let isSpinning = false; // Flag to prevent multiple concurrent spins
 
-        // DOM Elements
+        // DOM Element References - Caching elements for performance
         const balanceDisplay = document.getElementById('balance');
         const betAmountInput = document.getElementById('bet-amount');
         const betErrorDisplay = document.getElementById('bet-error');
@@ -214,27 +226,30 @@
         const lastWinColorDisplay = document.getElementById('last-win-color');
         const casinoWheel = document.querySelector('.casino-wheel');
 
-        // Initial UI Update
+        // Initial UI Update call when the script loads
         updateUI();
 
-        // Event Listeners
+        // Event Listeners for color selection buttons
         colorButtons.forEach(button => {
             button.addEventListener('click', () => {
-                // Remove 'selected' class from all buttons
+                // Remove the 'selected' visual indicator from all buttons
                 colorButtons.forEach(btn => btn.classList.remove('ring-4', 'ring-yellow-400', 'border-yellow-400'));
-                // Add 'selected' class to the clicked button
+                // Add the 'selected' visual indicator to the clicked button
                 button.classList.add('ring-4', 'ring-yellow-400', 'border-yellow-400');
-                selectedColor = button.dataset.color;
-                colorErrorDisplay.textContent = ''; // Clear color error
+                selectedColor = button.dataset.color; // Store the chosen color
+                colorErrorDisplay.textContent = ''; // Clear any previous color selection error
             });
         });
 
+        // Event listener for the main spin button
         spinBtn.addEventListener('click', spinWheel);
 
-        // Helper function to update UI elements
+        /**
+         * Updates the UI elements such as balance display and spin button state.
+         */
         function updateUI() {
             balanceDisplay.textContent = `$${balance}`;
-            // Enable/disable spin button based on game state
+            // Disable spin button if wheel is spinning to prevent re-clicks
             if (isSpinning) {
                 spinBtn.disabled = true;
                 spinBtn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -244,11 +259,13 @@
             }
         }
 
-        // Function to handle the spin logic
+        /**
+         * Handles the main game logic for spinning the wheel, determining win/loss, and updating the UI.
+         */
         function spinWheel() {
-            if (isSpinning) return; // Prevent double spinning
+            if (isSpinning) return; // Exit if a spin is already in progress
 
-            // Validate inputs
+            // Input Validation: Check bet amount
             const betAmount = parseInt(betAmountInput.value);
             if (isNaN(betAmount) || betAmount <= 0) {
                 betErrorDisplay.textContent = 'Please enter a valid positive bet amount.';
@@ -258,75 +275,88 @@
                 betErrorDisplay.textContent = `You don't have enough balance! Max bet: $${balance}`;
                 return;
             }
+            // Input Validation: Check if a color is selected
             if (!selectedColor) {
                 colorErrorDisplay.textContent = 'Please select a color.';
                 return;
             }
 
-            // Clear previous errors and messages
+            // Clear previous error and result messages
             betErrorDisplay.textContent = '';
             resultMessageDisplay.textContent = '';
-            resultMessageDisplay.classList.remove('fade-in-out'); // Reset animation
+            resultMessageDisplay.classList.remove('fade-in-out', 'text-green-400', 'text-red-400'); // Reset animation and color
 
-            isSpinning = true;
-            updateUI(); // Disable spin button
+            isSpinning = true; // Set spinning flag
+            updateUI(); // Update UI to disable spin button
 
-            // Deduct bet immediately
+            // Deduct bet amount from balance immediately
             balance -= betAmount;
-            updateUI();
+            updateUI(); // Update balance display
 
-            // Determine winning color (randomly)
+            // Determine the winning color randomly
             const colors = ['red', 'green', 'blue', 'yellow'];
             const winningColor = colors[Math.floor(Math.random() * colors.length)];
 
-            // --- Corrected Wheel Spin Animation Logic ---
-            // The pointer is fixed at the top (visually 270 degrees on a standard unit circle, where 0 is right, 90 is down, 180 is left, 270 is up).
-            // The segments are positioned: Red (0deg), Green (90deg), Blue (180deg), Yellow (270deg).
-            // We want the winning segment to rotate to align with the pointer (270deg position).
+            // --- Wheel Spin Animation Logic ---
+            // The pointer is visually at the top (conceptually 270 degrees on a standard unit circle,
+            // where 0 is right, 90 is down, 180 is left, 270 is up).
+            // The wheel segments are arranged: Red (0deg), Green (90deg), Blue (180deg), Yellow (270deg).
+            // We need to calculate how much to rotate the wheel so the winning segment aligns with the pointer.
 
-            let angleToAlign = 0; // This is the additional clockwise rotation needed for the winning segment to reach the top.
+            let angleToAlign = 0; // This will store the additional clockwise rotation needed.
 
             switch (winningColor) {
-                case 'red':    angleToAlign = 270; break; // Red starts at 0deg, needs to rotate 270deg clockwise to reach 270deg (top)
-                case 'green':  angleToAlign = 180; break; // Green starts at 90deg, needs to rotate 180deg clockwise to reach 270deg (top)
-                case 'blue':   angleToAlign = 90; break;  // Blue starts at 180deg, needs to rotate 90deg clockwise to reach 270deg (top)
-                case 'yellow': angleToAlign = 0; break;   // Yellow starts at 270deg, already at the top, needs 0deg additional rotation
+                case 'red':
+                    angleToAlign = 270; // Red is at 0deg, needs to rotate 270deg clockwise to reach 270deg (top)
+                    break;
+                case 'green':
+                    angleToAlign = 180; // Green is at 90deg, needs to rotate 180deg clockwise to reach 270deg (top)
+                    break;
+                case 'blue':
+                    angleToAlign = 90; // Blue is at 180deg, needs to rotate 90deg clockwise to reach 270deg (top)
+                    break;
+                case 'yellow':
+                    angleToAlign = 0; // Yellow is at 270deg, already at the top, needs 0deg additional rotation
+                    break;
             }
 
-            const spins = 5; // Number of full spins to make the animation engaging
-            const totalRotation = (spins * 360) + angleToAlign; // Total clockwise rotation for the wheel
+            const spins = 5; // Number of full 360-degree rotations for visual effect
+            // Total rotation combines full spins and the precise alignment angle
+            const totalRotation = (spins * 360) + angleToAlign;
 
-            casinoWheel.style.transition = 'transform 3s ease-out'; // Apply smooth transition
-            casinoWheel.style.transform = `rotate(${totalRotation}deg)`; // Apply the calculated rotation
+            // Apply transition for smooth animation
+            casinoWheel.style.transition = 'transform 3s ease-out';
+            // Apply the calculated rotation to the wheel
+            casinoWheel.style.transform = `rotate(${totalRotation}deg)`;
 
-            // After animation completes
+            // After the animation completes (3 seconds)
             setTimeout(() => {
-                isSpinning = false;
+                isSpinning = false; // Reset spinning flag
                 updateUI(); // Re-enable spin button
 
-                // Update the last winning color display
+                // Update the 'Last Win' display
                 lastWinColorDisplay.textContent = winningColor.charAt(0).toUpperCase() + winningColor.slice(1);
-                // Dynamically set text color based on winning color (using Tailwind's color variables)
+                // Set the color of 'Last Win' text to match the winning color (using Tailwind's CSS variables)
                 lastWinColorDisplay.style.color = `var(--tw-color-${winningColor}-400)`;
 
-                // Determine win/loss and update balance
+                // Determine if the player won or lost and update balance/message
                 if (selectedColor === winningColor) {
-                    balance += betAmount * 2;
+                    balance += betAmount * 2; // Double the bet amount
                     resultMessageDisplay.textContent = `🎉 You won! You doubled your bet! (+${betAmount})`;
-                    resultMessageDisplay.classList.add('text-green-400', 'fade-in-out');
+                    resultMessageDisplay.classList.add('text-green-400', 'fade-in-out'); // Display win message in green
                 } else {
                     resultMessageDisplay.textContent = `😔 You lost! The color was ${winningColor.toUpperCase()}.`;
-                    resultMessageDisplay.classList.add('text-red-400', 'fade-in-out');
+                    resultMessageDisplay.classList.add('text-red-400', 'fade-in-out'); // Display loss message in red
                 }
-                updateUI(); // Update balance display after win/loss
+                updateUI(); // Update the balance display after win/loss
 
-                // Reset wheel position for next spin, without animation
-                // This prevents the wheel from 'snapping' back to 0 immediately after the animated spin.
+                // Reset wheel position for the *next* spin without animation
+                // This prevents the wheel from snapping back immediately after the animated spin ends.
                 setTimeout(() => {
-                    casinoWheel.style.transition = 'none'; // Remove transition for instant reset
-                    casinoWheel.style.transform = 'rotate(0deg)'; // Reset to initial state
-                }, 3100); // Slightly after the main animation ends (3000ms + buffer)
-            }, 3000); // Match main animation duration
+                    casinoWheel.style.transition = 'none'; // Temporarily remove transition
+                    casinoWheel.style.transform = 'rotate(0deg)'; // Reset to original position
+                }, 3100); // A small delay after the main animation finishes to ensure it's not visible
+            }, 3000); // This timeout matches the 'transform' transition duration
         }
     </script>
 </body>
